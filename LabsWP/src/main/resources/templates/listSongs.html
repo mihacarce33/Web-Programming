@@ -17,9 +17,20 @@
 <main>
     <h2>Choose a song:</h2>
     <form method="get" action="/songs">
-        <input type="text" name="filter">
-        <input type='submit' value='Submit'>
+        <span>Select an album: </span>
+        <select id="albumId" name="albumId" onchange="this.form.submit()">
+            <option value="">None</option>
+            <option th:each="album: ${albums}"
+                    th:value="${album.id}"
+                    th:text="${album.name}"
+                    th:selected="${album.id == albumId}">
+            </option>
+        </select>
     </form>
+<!--    <form method="get" action="/songs">-->
+<!--        <input type="text" name="filter">-->
+<!--        <input type='submit' value='Submit'>-->
+<!--    </form>-->
     <form method="post" action="/songs">
         <ul type="none">
             <li th:each="song: ${songs}">

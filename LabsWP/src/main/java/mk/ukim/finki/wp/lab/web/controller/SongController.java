@@ -28,15 +28,17 @@ public class SongController {
                            @RequestParam String genre,
                            @RequestParam Integer releaseYear,
                            @RequestParam Long albumId) {
-        Song song = new Song(trackId, title, genre, releaseYear, albumService.findOne(albumId), new ArrayList<>());
+        Song song = new Song(trackId, title, genre, releaseYear, albumService.findById(albumId), new ArrayList<>());
         songService.saveSong(song);
         return "redirect:/songs";
     }
 
     @GetMapping
-    public String getSongsPage(Model model){
-        model.addAttribute("songs", this.songService.listSongs());
+    public String getSongsPage(Model model, @RequestParam (required = false) Long albumId) {
+        if (albumId == null) model.addAttribute("songs", this.songService.listSongs());
+        else model.addAttribute("songs", songService.findAllByAlbum_Id(albumId));
         model.addAttribute("albums", this.albumService.findAll());
+        model.addAttribute("albumId", albumId);
         return "listSongs";
     }
 
@@ -70,7 +72,7 @@ public class SongController {
 
     @PostMapping("/edit")
     public String editSong(@RequestParam String title, @RequestParam String trackId, @RequestParam String genre, @RequestParam int releaseYear, @RequestParam Long albumId, @RequestParam Long songID, Model model) {
-        Song song = new Song(trackId, title, genre, releaseYear, albumService.findOne(albumId), new ArrayList<>());
+        Song song = new Song(trackId, title, genre, releaseYear, albumService.findById(albumId), new ArrayList<>());
         song.setId(songID);
         songService.editSong(song);
         return "redirect:/songs";

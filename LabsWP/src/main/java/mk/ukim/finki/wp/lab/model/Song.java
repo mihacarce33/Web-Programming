@@ -8,9 +8,12 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@Entity
+@Table(name = "song")
 public class Song {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String trackId;
     String title;
