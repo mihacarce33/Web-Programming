@@ -65,11 +65,6 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public List<Song> findAllByAlbum_Id(Long albumId) {
-        Album album = albumRepository.findById(albumId).orElse(null);
-        if (album != null) {
-            return songRepository.findAll().stream().filter(x->x.getAlbum().equals(album)).toList();
-        }
-        else throw new RuntimeException("No such album");
-//        return songRepository.findAllByAlbum_Id(albumId);
+        return songRepository.findAllByAlbum_Id(albumId);
     }
 }
