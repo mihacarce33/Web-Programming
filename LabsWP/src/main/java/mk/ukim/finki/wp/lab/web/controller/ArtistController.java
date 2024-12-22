@@ -4,6 +4,7 @@ import mk.ukim.finki.wp.lab.model.Artist;
 import mk.ukim.finki.wp.lab.model.Song;
 import mk.ukim.finki.wp.lab.service.ArtistService;
 import mk.ukim.finki.wp.lab.service.SongService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class ArtistController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public String postArtist(@RequestParam Long artistId,
                              @RequestParam String trackId) {
         Song song = songService.findByTrackId(trackId);

@@ -1,12 +1,12 @@
 package mk.ukim.finki.wp.lab.bootstrap;
 
 import jakarta.annotation.PostConstruct;
-import mk.ukim.finki.wp.lab.model.Album;
-import mk.ukim.finki.wp.lab.model.Artist;
-import mk.ukim.finki.wp.lab.model.Song;
+import mk.ukim.finki.wp.lab.model.*;
 import mk.ukim.finki.wp.lab.repository.jpa.AlbumRepository;
 import mk.ukim.finki.wp.lab.repository.jpa.ArtistRepository;
 import mk.ukim.finki.wp.lab.repository.jpa.SongRepository;
+import mk.ukim.finki.wp.lab.repository.jpa.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,11 +16,15 @@ public class DataHolder {
     private final SongRepository songRepository;
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataHolder(SongRepository songRepository, ArtistRepository artistRepository, AlbumRepository albumRepository) {
+    public DataHolder(SongRepository songRepository, ArtistRepository artistRepository, AlbumRepository albumRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.songRepository = songRepository;
         this.artistRepository = artistRepository;
         this.albumRepository = albumRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostConstruct
@@ -47,7 +51,11 @@ public class DataHolder {
             artistRepository.save(new Artist("Whitney", "Houston", "Pop and R&B singer known for her vocal range and 'I Will Always Love You'."));
             artistRepository.save(new Artist("Michael", "Jackson", "King of Pop, famous for hits like 'Thriller' and 'Billie Jean'."));
             artistRepository.save(new Artist("Aretha", "Franklin", "Queen of Soul, known for 'Respect' and her powerful voice."));
+        }
 
+        if (userRepository.count()==0){
+            userRepository.save(new User("admin", passwordEncoder.encode("admin"), Role.ROLE_ADMIN));
+            userRepository.save(new User("asd", passwordEncoder.encode("asd"), Role.ROLE_USER));
         }
     }
 }
