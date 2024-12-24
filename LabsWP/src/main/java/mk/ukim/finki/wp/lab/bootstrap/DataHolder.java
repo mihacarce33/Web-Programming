@@ -5,7 +5,7 @@ import mk.ukim.finki.wp.lab.model.*;
 import mk.ukim.finki.wp.lab.repository.jpa.AlbumRepository;
 import mk.ukim.finki.wp.lab.repository.jpa.ArtistRepository;
 import mk.ukim.finki.wp.lab.repository.jpa.SongRepository;
-import mk.ukim.finki.wp.lab.repository.jpa.UserRepository;
+//import mk.ukim.finki.wp.lab.repository.jpa.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +16,14 @@ public class DataHolder {
     private final SongRepository songRepository;
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public DataHolder(SongRepository songRepository, ArtistRepository artistRepository, AlbumRepository albumRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DataHolder(SongRepository songRepository, ArtistRepository artistRepository, AlbumRepository albumRepository, PasswordEncoder passwordEncoder) {
         this.songRepository = songRepository;
         this.artistRepository = artistRepository;
         this.albumRepository = albumRepository;
-        this.userRepository = userRepository;
+//        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -53,9 +53,9 @@ public class DataHolder {
             artistRepository.save(new Artist("Aretha", "Franklin", "Queen of Soul, known for 'Respect' and her powerful voice."));
         }
 
-        if (userRepository.count()==0){
-            userRepository.save(new User("admin", passwordEncoder.encode("admin"), Role.ROLE_ADMIN));
-            userRepository.save(new User("asd", passwordEncoder.encode("asd"), Role.ROLE_USER));
-        }
+//        if (userRepository.count()==0){
+//            userRepository.save(new User("admin", passwordEncoder.encode("admin"), Role.ROLE_ADMIN));
+//            userRepository.save(new User("asd", passwordEncoder.encode("asd"), Role.ROLE_USER));
+//        }
     }
 }

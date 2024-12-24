@@ -22,11 +22,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class WebSecurityConfig {
     private final PasswordEncoder passwordEncoder;
-    private final CustomUsernamePasswordAuthenticationProvider authProvider;
+//    private final CustomUsernamePasswordAuthenticationProvider authProvider;
 
-    public WebSecurityConfig(PasswordEncoder passwordEncoder, CustomUsernamePasswordAuthenticationProvider authProvider) {
+    public WebSecurityConfig(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
-        this.authProvider = authProvider;
     }
 
     @Bean
@@ -34,31 +33,24 @@ public class WebSecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .headers((headers) -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                )
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/songs", "/songDetails/**")
                         .permitAll()
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest()
-                        .authenticated()
+                        .anonymous()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin((form) -> form
                         .failureUrl("/login?error=BadCredentials")
-                        .defaultSuccessUrl("/songs", true)
+                        .defaultSuccessUrl("/songs")
                 )
                 .logout((logout) -> logout
                         .clearAuthentication(true)
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .logoutSuccessUrl("/login")
-                )
-                .exceptionHandling((ex) -> ex
-                        .accessDeniedPage("/access_denied")
                 );
-
 
         return http.build();
     }
@@ -79,12 +71,12 @@ public class WebSecurityConfig {
         return new InMemoryUserDetailsManager(user, admin);
     }
 
-    @Bean
-    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder =
-                http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.authenticationProvider(authProvider);
-        return authenticationManagerBuilder.build();
-    }
+//    @Bean
+//    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+//        AuthenticationManagerBuilder authenticationManagerBuilder =
+//                http.getSharedObject(AuthenticationManagerBuilder.class);
+//        authenticationManagerBuilder.authenticationProvider(authProvider);
+//        return authenticationManagerBuilder.build();
+//    }
 
 }
